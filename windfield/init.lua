@@ -824,6 +824,19 @@ function Collider:getEnterCollisionData(other_collision_class_name)
     return self.enter_collision_data[other_collision_class_name]
 end
 
+function Collider:getAllEnterCollisionData(other_collision_class_name)
+    local res = {}
+    local events = self.collision_events[other_collision_class_name]
+    if events and #events >= 1  then
+        for _, e in ipairs(events) do
+            if e.collision_type == 'enter' then
+              res[#res + 1] = {collider = e.collider_2, contact = e.contact}
+            end
+        end
+    end
+    return res
+end
+
 function Collider:exit(other_collision_class_name)
     local events = self.collision_events[other_collision_class_name]
     if events and #events >= 1  then
@@ -844,6 +857,19 @@ end
 
 function Collider:getExitCollisionData(other_collision_class_name)
     return self.exit_collision_data[other_collision_class_name]
+end
+
+function Collider:getAllExitCollisionData(other_collision_class_name)
+    local res = {}
+    local events = self.collision_events[other_collision_class_name]
+    if events and #events >= 1  then
+        for _, e in ipairs(events) do
+            if e.collision_type == 'exit' then
+                res[#res + 1] = {collider = e.collider_2, contact = e.contact}
+            end
+        end
+    end
+    return res
 end
 
 function Collider:stay(other_collision_class_name)
